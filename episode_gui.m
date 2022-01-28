@@ -356,7 +356,8 @@ function applyTorque(varargin)
         disp('No forward progess.') 
     elseif foot_height < 0
        disp('Foot has made impact.')
-       [x_plus, f] = impact_event7links([q;dq], model_params);
+       [~, f] = impact_event7links([q;dq], model_params);
+       sprintf('Vector of horizontal and vertical impulsive forces [%0.2f, %0.2f]  Newtons',f(1),f(2))
        S  = [ % Transition matrix
             1  1 0 0 0 0 0
             0 -1 0 0 0 0 0
@@ -372,6 +373,7 @@ function applyTorque(varargin)
         ddq = S*ddq;
         
         [SC, ST, SA, SK, FK, FA, FT, FC] = switch_stance_cart_coordinates(SC, ST, SA, SK, FK, FA, FT, FC);
+        SC(2) = 0;
        
     end
     
@@ -386,8 +388,6 @@ function applyTorque(varargin)
     %   ~ FT: free foot center of curvature
     %   ~ FC: lowest point on free foot
     [SC, ST, SA, SK, H, FK, FA, FT, FC, torso_end, torso_com] = next_cart_coordinates(q, q0, SC, model_params, ST, SA, SK, H, FK, FA, FT, FC, torso_end, torso_com);
-
-    SC, FC
 
     update_plot(q, model_params, ST, SA, SK, H, FK, FA, FT, torso_end)
     update_gui(q0, q, dq, ddq, u)
