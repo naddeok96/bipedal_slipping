@@ -75,6 +75,7 @@ initialize_gui(q0, q, dq, ddq, u);
 initialize_plot(q, model_params, ...
                 ST, SA, SK, H, FK, FA, FT, torso_end)
 
+disp('Hi')
 %% Functions
 function initialize_gui(q0, q, dq, ddq, u)
     global gui
