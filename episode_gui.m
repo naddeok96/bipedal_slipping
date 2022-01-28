@@ -29,15 +29,15 @@ dt = 1e-2;
 %      13/16 * pi % 7 HAT
 %      ];
 
-% % q = [ % End of step
-% %      0.6;    % 1 Free Thigh
-% %      -0.7512;   % 2 Between Thighs
-% %      -0.2584 ;  % 3 Stance Shank
-% %      -0.3531;   % 4 Free Shank
-% %      1.8002;    % 5 Stance Foot
-% %      1.5495;    % 6 Free Foot
-% %      13/16 * pi % 7 HAT
-% %      ];
+q = [ % End of step
+     0.60;    % 1 Free Thigh
+     -0.7512;   % 2 Between Thighs
+     -0.2584 ;  % 3 Stance Shank
+     -0.3531;   % 4 Free Shank
+     1.8002;    % 5 Stance Foot
+     1;    % 6 Free Foot
+     13/16 * pi % 7 HAT
+     ];
  
 [q0, dq, ddq] = deal(zeros(7,1));
 
@@ -356,6 +356,23 @@ function applyTorque(varargin)
         disp('No forward progess.') 
     elseif foot_height < 0
        disp('Foot has made impact.')
+       [x_plus, f] = impact_event7links([q;dq], model_params);
+       S  = [ % Transition matrix
+            1  1 0 0 0 0 0
+            0 -1 0 0 0 0 0
+            0  0 0 1 0 0 0
+            0  0 1 0 0 0 0
+            0  0 0 0 0 1 0
+            0  0 0 0 1 0 0
+            0 -1 0 0 0 0 1];
+        
+        q0  = S*q0;
+        q   = S*q;
+        dq  = S*dq;
+        ddq = S*ddq;
+        
+        [SC, ST, SA, SK, FK, FA, FT, FC] = switch_stance_cart_coordinates(SC, ST, SA, SK, FK, FA, FT, FC);
+       
     end
     
     % Update coordinates, plot and 
@@ -369,8 +386,8 @@ function applyTorque(varargin)
     %   ~ FT: free foot center of curvature
     %   ~ FC: lowest point on free foot
     [SC, ST, SA, SK, H, FK, FA, FT, FC, torso_end, torso_com] = next_cart_coordinates(q, q0, SC, model_params, ST, SA, SK, H, FK, FA, FT, FC, torso_end, torso_com);
-%     [SC, ST, SA, SK, FK, FA, FT, FC]    = check_coordinates(SC, ST, SA, SK, FK, FA, FT, FC);
 
+    SC, FC
 
     update_plot(q, model_params, ST, SA, SK, H, FK, FA, FT, torso_end)
     update_gui(q0, q, dq, ddq, u)
