@@ -1,5 +1,5 @@
-function apply_torque(q,dq,u,dt,model_params,ctrl_params,SC,ST,SA,SK,H,FK,FA,FT,FC,torso_end,torso_com)
-    
+function apply_torque(~,~,gui,q,dq,u,dt,model_params,ctrl_params,SC,ST,SA,SK,H,FK,FA,FT,FC,torso_end,torso_com, stancefoot_line, freefoot_line, stanceThigh_line, stanceShank_line, freeThigh_line, freeShank_line, torso_line, body_line)
+
     % Calculate matricies   
     [~, D] = get_De_7links_sgl(q, model_params);             % Inertia
     [~, G] = get_Ge_7links_sgl(q, model_params);             % Gravity
@@ -34,7 +34,7 @@ function apply_torque(q,dq,u,dt,model_params,ctrl_params,SC,ST,SA,SK,H,FK,FA,FT,
     % Update coordinates
     [~, ST, SA, SK, H, FK, FA, FT, ~, torso_end, ~] = next_cart_coordinates(q, q0, SC, model_params, ST, SA, SK, H, FK, FA, FT, FC, torso_end, torso_com);
 
-    update_plot(q, model_params, ST, SA, SK, H, FK, FA, FT, torso_end)
-    update_gui(q0, q, dq, ddq, u)
+    update_plot(q, model_params, ST, SA, SK, H, FK, FA, FT, torso_end, stancefoot_line, freefoot_line, stanceThigh_line, stanceShank_line, freeThigh_line, freeShank_line, torso_line, body_line)
+    update_gui(gui,q0, q, dq, ddq, u)
     
 end

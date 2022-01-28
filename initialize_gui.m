@@ -1,4 +1,4 @@
-function gui = initialize_gui(q0, q, dq, ddq, u)
+function gui = initialize_gui(q0,q,dq,ddq,u,dt,model_params,ctrl_params,SC,ST,SA,SK,H,FK,FA,FT,FC,torso_end,torso_com)
 % Creates a graphical user interface to animate an episode of the 7 link 
 % biped walking. The controller can be automated or manual.
 %
@@ -34,17 +34,21 @@ gui.config_table = uitable(gui.fig, 'Data', table2cell(table_data),...
 table_extent = get(gui.config_table,'Extent');
 set(gui.config_table,'Position',[table_left table_bottom table_extent(3) table_extent(4)])
 
+%% Add plot
+[stancefoot_line,freefoot_line,stanceThigh_line,stanceShank_line,freeThigh_line,freeShank_line,torso_line,body_line] = initialize_plot(q, model_params,ST, SA, SK, H, FK, FA, FT, torso_end);
+
 %% Apply Torque Button
 pb_left   = 0.67;
 pb_bottom = 0.09;
 pb_width  = 0.2;
 pb_height = 0.1;
+
 gui.push_button = uicontrol('style','push',...
                  'units','normalized',...
                  'position',[pb_left pb_bottom pb_width pb_height],...
                  'fontsize',14,...
                  'string','Apply Torque',...
-                 'callback',{@apply_torque, gui});
+                 'callback',{@apply_torque,gui,q,dq,u,dt,model_params,ctrl_params,SC,ST,SA,SK,H,FK,FA,FT,FC,torso_end,torso_com,stancefoot_line, freefoot_line, stanceThigh_line, stanceShank_line, freeThigh_line, freeShank_line, torso_line, body_line});
 
 %% Sliders
 slider_left   = 0.65;

@@ -62,9 +62,12 @@ S  = [
     0 -1 0 0 0 0 1];
 q = S*q;
 
-%% Initialize GUI with buttons
+%% Display
+% Initialize GUI with buttons
 initialize_gui(q0,q,dq,ddq,u,dt,model_params,ctrl_params,SC,ST,SA,SK,H,FK,FA,FT,FC,torso_end,torso_com);
+[stancefoot_line,freefoot_line,stanceThigh_line,stanceShank_line,freeThigh_line,freeShank_line,torso_line,body_line] = initialize_plot(q, model_params,ST, SA, SK, H, FK, FA, FT, torso_end);
 
+disp('Hi')
 %% Functions
 function [x, y, AA] = draw_foot(r,center,xf,abs_angle,foot_angle,phi_b,phi_t)
     % given a radius, center point and abs shank angle, draws a foot
@@ -154,7 +157,12 @@ function getSliderValues(varargin)
 end
 
 
-
+function update_gui(q0, q, dq, ddq, u)
+    global gui 
+    ue = [u(1:5); 0; u(6)];
+    gui.config_table.Data =  table2cell(table(q0, q,dq, ddq, ue));
+    
+end
 
 function fig_points()
 %% Stick Figure Points
