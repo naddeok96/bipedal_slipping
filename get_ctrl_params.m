@@ -33,11 +33,13 @@ ctrl_params.Omega=[1 0 0 0 0 0 0;
 ctrl_params.inv_Omega = inv(ctrl_params.Omega);
 
 % Maps u to joint coordinates                 
-ctrl_params.B = [0, 0, 0, 0, 0, 0;
-                 1, 0, 0, 0, 0, 0;
-                 0, 1, 0, 0, 0, 0;
-                 0, 0, 1, 0, 0, 0;
-                 0, 0, 0, 1, 0, 0;
-                 0, 0, 0, 0, 1, 0;
-                 0, 0, 0, 0, 0, 1];
+% ctrl_params.B = [0, 0, 0, 0, 0, 0; % Orginal 7link used this 7x6, unknown
+% why, if this comment is still here please debate with advisor
+%                  1, 0, 0, 0, 0, 0;
+%                  0, 1, 0, 0, 0, 0;
+%                  0, 0, 1, 0, 0, 0;
+%                  0, 0, 0, 1, 0, 0;
+%                  0, 0, 0, 0, 1, 0;
+%                  0, 0, 0, 0, 0, 1];
+ctrl_params.B = eye(7);
                  

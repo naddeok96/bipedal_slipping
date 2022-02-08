@@ -19,7 +19,6 @@ function [q, dq, ddq] = angle_constraints(q, dq, ddq)
 %     q(1)+q(7) % HAT
     
     %% Bound Angles
-    bound(1,2,3);
     stop = ones(7, 1);
     [q(1), stop(1)] = bound( q(1)        , -hip_extension_limit        , hip_flexion_limit);        % Stance Thigh
     [q(2), stop(2)] = bound( q(2) + q(1) , -hip_extension_limit        , hip_flexion_limit);        % Free Thigh
@@ -33,24 +32,36 @@ function [q, dq, ddq] = angle_constraints(q, dq, ddq)
     [q(7), stop(7)] = bound( q(7) + q(1) , pi/2                        , 3*pi/2);                   % HAT
     q(7) = q(7) - q(1);
     
+    
+    % Stop velociy if bounded
+    dq0 = dq;
+    ddq0 = ddq;
+    
     dq  = stop.*dq;
-    ddq = stop.*ddq;
+    ddq = stop.*dq;
+    ddq = ((dq^2) - (dq0*2))/(2*(q-q0));
+    
+    disp('hi')
     
     %% Bounding Function
-    function [y, stop] = bound(x, low, up)
+    function [y, is_bounded] = bound(x, low, up)
        % Input
        % ~ x   : value to bound
        % ~ low : lower bound
        % ~ up  : upper bound
        % Output
        % ~ y   : bounded input value
-       stop = 1;
+       % ~ is_bounded : boolean for if bounded (1 is bounded, 0 not bounded)
        
-       if up < x || x < low
-           stop = 0;
-       end
-       
+       % Bound
        y = min(max(x, low), up); 
+       
+       % Record 
+       if y == x
+           is_bounded = 1;
+       else
+           is_bounded = 0;
+       end
     end
     
 end
