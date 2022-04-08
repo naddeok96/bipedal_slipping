@@ -51,6 +51,7 @@ q = [ % End of step
 
 % Switch Foot
 [SC, ST, SA, SK, FK, FA, FT, FC] = switch_stance_cart_coordinates(SC, ST, SA, SK, FK, FA, FT, FC);
+SC, ST, SA, SK, H, FK, FA, FT, FC, torso_end, torso_com
 S  = [
     1  1 0 0 0 0 0
     0 -1 0 0 0 0 0

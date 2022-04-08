@@ -43,3 +43,5 @@ ST         = SA - [-(xf*sin(gamma + q(1) + q(3) + q(5))), xf*cos(gamma + q(1) + 
 SC         = ST - [-(R*sin(gamma)), R*cos(gamma)]';
 torso_end  =  H - [-L_torso*sin(gamma+q(1)+q(7)),L_torso*cos(gamma+q(1)+q(7))]';
 torso_com  =  H - [-c_torso*sin(gamma+q(1)+q(7)),c_torso*cos(gamma+q(1)+q(7))]';
+
+end
